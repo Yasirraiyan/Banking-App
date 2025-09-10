@@ -1,0 +1,220 @@
+1️⃣ App.js (Main Router Setup)
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+
+React Concept:
+
+React Router DOM: Single Page Application (SPA) এর জন্য পেজ নেভিগেশন।
+
+BrowserRouter: ব্রাউজারের URL এর উপর ভিত্তি করে কম্পোনেন্ট রেন্ডার করে।
+
+Routes & Route: কোন path এ কোন component দেখাবো তা নির্ধারণ করে।
+
+<Routes>
+  <Route path="/" element={<Dashboard />}>
+    <Route index element={<Dashboard.Home />} />
+    <Route path="signup" element={<SignupForm />} />
+    <Route path="login" element={<LoginForm />} />
+    <Route path="deposit" element={<Deposit />} />
+    <Route path="withdraw" element={<Withdraw />} />
+    <Route path="transfer" element={<Transfer />} />
+    <Route path="history" element={<TransactionHistory />} />
+  </Route>
+</Routes>
+
+
+Explanation:
+
+"/" path → Dashboard কম্পোনেন্ট।
+
+Nested routes → Dashboard এর ভেতরে বিভিন্ন view যেমন signup, login, deposit ইত্যাদি।
+
+React Concept: Nested routing, SPA navigation।
+
+2️⃣ Dashboard.js
+const [currentView, setCurrentView] = useState("home");
+const [balance, setBalance] = useState(5000);
+const [transactions, setTransactions] = useState([]);
+const [minBalance] = useState(1000);
+
+
+React Concept:
+
+useState Hook: স্টেট মেইনটেইন করার জন্য।
+
+এখানে আমরা currentView, balance, transactions, minBalance রাখছি।
+
+Why: যেকোনো view change বা transaction update করতে React কে রেন্ডার করতে হবে।
+
+const [user, setUser] = useState({ username: "", email: "", password: "" });
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
+Explanation:
+
+ইউজারের লগইন স্ট্যাটাস এবং তথ্য রাখা হচ্ছে।
+
+Navigation Function
+const Navigation = () => (
+  <nav>
+    {!isLoggedIn ? 
+      <button onClick={() => setCurrentView("signup")}>Signup</button> : 
+      <button onClick={() => setCurrentView("deposit")}>Deposit</button>
+    }
+  </nav>
+)
+
+
+React Concept:
+
+Conditional Rendering: লগইন থাকলে বা না থাকলে আলাদা button দেখানো।
+
+onClick Event: Event handling → currentView update করা।
+
+Why:
+
+UI পরিবর্তন করার জন্য React state change → re-render হয়।
+
+renderView Function
+const renderView = () => {
+  if (!isLoggedIn) {
+    if (currentView === "signup") return <SignupForm />;
+    if (currentView === "login") return <LoginForm />;
+    return <h2>Welcome! Please Signup or Login.</h2>;
+  } else {
+    const commonProps = { balance, setBalance, transactions, setTransactions, minBalance };
+    switch (currentView) {
+      case "deposit": return <Deposit {...commonProps} />;
+      case "withdraw": return <Withdraw {...commonProps} />;
+      ...
+    }
+  }
+};
+
+
+React Concept:
+
+Conditional Rendering + Props Passing
+
+Spread Operator (...commonProps) → সহজে props পাঠানো।
+
+Why:
+
+এক জায়গা থেকে সব ভিউ কন্ট্রোল করতে পারি।
+
+3️⃣ Deposit, Withdraw, Transfer Components
+const [amount, setAmount] = useState("");
+const handleDeposit = () => {
+  setBalance(balance + parseFloat(amount));
+  setTransactions([...transactions, { type: "Deposit", amount: parseFloat(amount), date: new Date() }]);
+};
+
+
+React Concept:
+
+useState: ফর্ম ইনপুট স্টেট রাখা।
+
+Event Handling (onClick): Deposit button handle করা।
+
+Props: balance, setBalance, transactions, setTransactions → parent state update।
+
+Withdraw & Transfer:
+
+একই pattern, শুধু Withdraw এবং Transfer এ minBalance check এবং recipient input আছে।
+
+Why: ব্যাংকিং লজিক maintain করা।
+
+4️⃣ TransactionHistory Component
+function TransactionHistory({ transactions }) {
+  return (
+    <ul>
+      {transactions.map((t, idx) => (
+        <li key={idx}>
+          {t.date.toLocaleString()}: {t.type} ${t.amount} {t.to ? `→ ${t.to}` : ""}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+
+React Concept:
+
+List Rendering with map()
+
+Key Prop: React efficiently re-render করার জন্য।
+
+Why:
+
+সব transaction দেখানোর জন্য।
+
+5️⃣ SignupForm & LoginForm
+const [username, setUsername] = useState("");
+const [email, setEmail] = useState("");
+const handleSignup = (e) => {
+  e.preventDefault();
+  setUser({ username, email, password });
+};
+
+
+React Concept:
+
+Controlled Components: input এর value React state এর সাথে bind।
+
+Form Handling: onSubmit + preventDefault()
+
+State Update → UI Refresh
+
+LoginForm:
+
+Validate credentials → setIsLoggedIn(true) → UI update
+
+Navigate to dashboard → React Router useNavigate()
+
+6️⃣ TransactionForm (Reusable Component)
+function TransactionForm({ type, balance, minBalance, setBalance, setTransactions })
+
+
+React Concept:
+
+Reusable Component → Deposit, Withdraw, Transfer একই component থেকে handle করা যায়।
+
+Props: Different behavior handle করার জন্য।
+
+State inside component → Local input management (amount, recipient)
+
+Why:
+
+DRY principle (Don't Repeat Yourself)
+
+7️⃣ useOutletContext in React Router
+const { balance, setBalance, setTransactions } = useOutletContext();
+
+
+React Concept:
+
+useOutletContext: Nested Route এ parent থেকে context / state access করা।
+
+Deposit, Withdraw, Transfer, History সবেই parent Dashboard এর state ব্যবহার করছে।
+
+Why:
+
+Props drilling কমানোর জন্য।
+
+💡 Summary of React Topics in Your Project
+Topic	Usage in Project	Why
+useState	Track balance, transactions, form inputs	Dynamic UI updates
+Props	Pass state & handlers to child components	Parent-child communication
+Conditional Rendering	Show different views (login/signup/dashboard)	UI control based on state
+Event Handling	onClick, onChange, onSubmit	Interactivity
+List Rendering	TransactionHistory.map()	Dynamic list display
+React Router (BrowserRouter, Routes, Route, useNavigate, useOutletContext)	Page navigation & nested route state sharing	SPA routing & context sharing
+Controlled Components	Forms for login, signup, transaction	Synchronize input & state
+Reusable Component	TransactionForm	Reduce code repetition
+Spread Operator (...)	Pass multiple props easily	Clean code
+
+💡 Key Takeaway:
+
+তোমার প্রজেক্টে state management, routing, conditional rendering, forms, reusable components, event handling সবই React এর core concept ব্যবহার করেছে।
+
+প্রতিটা function UI behavior + state logic এর জন্য আলাদা করা হয়েছে → clean code & maintainability।
