@@ -1,0 +1,122 @@
+Banking App - Feature List (বাংলা)
+১. ইউজার Authentication
+
+Signup / রেজিস্ট্রেশন
+
+ব্যবহারকারী নতুন অ্যাকাউন্ট তৈরি করতে পারবে।
+
+Username, Email, Password, Confirm Password ফিল্ড থাকবে।
+
+Password এর শক্তি দেখাবে (Weak / Medium / Strong)।
+
+Password এবং Confirm Password মিলছে কিনা দেখাবে।
+
+Required ফিল্ডগুলোর জন্য validation এবং error message।
+
+Login / লগইন
+
+Username, Email এবং Password দিয়ে লগইন।
+
+Validation: ফাঁকা ফিল্ড বা ভুল credential হলে alert দেখাবে।
+
+Login successful হলে Dashboard এ redirect করবে।
+
+Error ও success message show করবে।
+
+২. Dashboard / হোম পেজ
+
+ব্যবহারকারীর বর্তমান ব্যালান্স দেখাবে।
+
+নেভিগেশন বাটন থাকবে:
+
+Deposit, Withdraw, Transfer, Transaction History
+
+Logout
+
+Conditional rendering: লগইন না থাকলে শুধুমাত্র Signup/Login দেখাবে।
+
+৩. Deposit (টাকা জমা)
+
+ব্যবহারকারী টাকা Deposit করতে পারবে।
+
+Amount input ফিল্ড থাকবে।
+
+Deposit successful হলে alert দেখাবে।
+
+Balance update হবে এবং Transaction list এ যুক্ত হবে।
+
+৪. Withdraw (টাকা উত্তোলন)
+
+ব্যবহারকারী টাকা Withdraw করতে পারবে।
+
+Amount input ফিল্ড থাকবে।
+
+Minimum Balance validation: Balance কম হলে Withdraw হবে না।
+
+Withdraw successful হলে alert দেখাবে।
+
+Balance update হবে এবং Transaction list এ যুক্ত হবে।
+
+৫. Transfer (টাকা স্থানান্তর)
+
+ব্যবহারকারী অন্য ইউজারের কাছে টাকা পাঠাতে পারবে।
+
+Recipient username এবং Amount input ফিল্ড থাকবে।
+
+Minimum Balance validation: Balance কম হলে Transfer হবে না।
+
+Transfer successful হলে alert দেখাবে।
+
+Balance update হবে এবং Transaction list এ যুক্ত হবে।
+
+৬. Transaction History (লেনদেনের ইতিহাস)
+
+Deposit, Withdraw, Transfer সব transaction দেখাবে।
+
+Transaction এর type, amount, date, এবং recipient (যদি থাকে) দেখাবে।
+
+লিস্ট রেন্ডার করবে map() দিয়ে।
+
+কোনো transaction না থাকলে “No transactions yet” দেখাবে।
+
+৭. State Management
+
+useState ব্যবহার করে Balance, Transactions, CurrentView, User Data handle।
+
+Parent Dashboard থেকে child component এ props দিয়ে state পাঠানো।
+
+TransactionForm reusable component: Deposit/Withdraw/Transfer একই component ব্যবহার করতে পারবে।
+
+৮. Routing / Page Navigation
+
+React Router ব্যবহার:
+
+BrowserRouter, Routes, Route, useNavigate
+
+Nested Routing: Dashboard এর ভেতরে Deposit, Withdraw, Transfer, History।
+
+Login/Signup থেকে Dashboard এ redirect।
+
+৯. Validation & Alerts
+
+ফর্মে ফাঁকা ফিল্ডের জন্য alert / error message।
+
+Minimum Balance validation।
+
+Password & Confirm Password মিলছে কিনা দেখানো।
+
+Transaction successful হলে alert।
+
+🔟 Logout Functionality
+
+লগইন থাকলে Dashboard এ Logout button থাকবে।
+
+Logout করলে Dashboard / হোমে redirect।
+
+State reset বা conditional rendering অনুযায়ী UI update হবে।
+
+💡 Extra Notes:
+
+প্রজেক্টে Controlled Components, Event Handling, Conditional Rendering, Props, useState, Routing সব React core concept ব্যবহার হয়েছে।
+
+সব ফিচার একসাথে ব্যবহার করলে তুমি real-life banking app simulation তৈরি করতে পারবে।
